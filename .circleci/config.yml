@@ -590,11 +590,11 @@ workflows:
       #          - stable-website
 
         # Note: comment-out this job in ENT
-      - build-darwin-binaries:
-          filters: *backend_check_branches_filter
+      #- build-darwin-binaries:
+      #    filters: *backend_check_branches_filter
 
-      - test-e2e:
-          filters: *backend_check_branches_filter
+      #- test-e2e:
+      #    filters: *backend_check_branches_filter
 
       - test-ui:
           filters:
