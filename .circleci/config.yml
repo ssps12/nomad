@@ -159,6 +159,7 @@ commands:
             if [ ! -z $GOTEST_MOD ]; then
               sudo -E PATH="$GOPATH/bin:/usr/local/go/bin:$PATH" make test-nomad-module
             else
+              uname -m
               sudo -E PATH="$GOPATH/bin:/usr/local/go/bin:$PATH" make test-nomad
             fi
 
