@@ -291,10 +291,10 @@ jobs:
         default: ""
       executor:
         type: string
-        default: "go-machine-recent"
+        default: "go-arm64-image"
       goarch:
         type: string
-        default: "amd64"
+        default: "arm64"
       enable_race_testing:
         type: boolean
         default: false
