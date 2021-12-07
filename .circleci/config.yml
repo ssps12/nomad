@@ -377,16 +377,16 @@ jobs:
           path: /tmp/test-reports
       - store_artifacts:
           path: /tmp/test-reports
-  lint-go:
-    executor: go-arm64-image
-    steps:
-      - checkout
-      - run: apt-get update; apt-get install -y shellcheck sudo unzip
-      - install-buf
-      - run: make deps lint-deps
-      - run: make check
-      - run: make checkscripts
-      - run: mkdir -p ui/dist && make generate-all static-assets
+  #lint-go:
+  #  executor: go-arm64-image
+  #  steps:
+  #    - checkout
+  #    - run: apt-get update; apt-get install -y shellcheck sudo unzip
+  #    - install-buf
+  #    - run: make deps lint-deps
+  #    - run: make check
+  #    - run: make checkscripts
+  #    - run: mkdir -p ui/dist && make generate-all static-assets
   build-darwin-binaries:
     executor: go-macos
     steps:
@@ -565,7 +565,7 @@ executors:
     resource_class: arm.medium
     environment:
       <<: *common_envs
-      GOPATH: /home/circleci/go
+      GOPATH: /go
       GOLANG_VERSION: 1.17.3
 
 workflows:
