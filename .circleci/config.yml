@@ -614,17 +614,17 @@ workflows:
                 - /^e2e-.*/
                 - stable-website
 
-      #- test-machine:
-      #    name: "test-client"
-      #    test_packages: "./client/..."
+      - test-machine:
+          name: "test-client"
+          test_packages: "./client/..."
           # test branches are the branches that can impact unit tests
-      #    filters: &backend_test_branches_filter
-      #      branches:
-      #        ignore:
-      #          - /^.-ui\b.*/
-      #          - /^docs-.*/
-      #          - /^e2e-.*/
-      #          - stable-website
+          filters: &backend_test_branches_filter
+            branches:
+              ignore:
+                - /^.-ui\b.*/
+                - /^docs-.*/
+                - /^e2e-.*/
+                - stable-website
       - test-machine:
           name: "test-nomad"
           test_packages: "./nomad/..."
