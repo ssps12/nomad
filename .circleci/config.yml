@@ -580,14 +580,14 @@ workflows:
                 - stable-website
                 - /^.-ui\b.*/
 
-      - lint-go:
+      #- lint-go:
           # check branches are almost all the backend branches
-          filters: &backend_check_branches_filter
-            branches:
-              ignore:
-                - /^.-ui\b.*/
-                - /^docs-.*/
-                - stable-website
+      #    filters: &backend_check_branches_filter
+      #      branches:
+      #        ignore:
+      #          - /^.-ui\b.*/
+      #          - /^docs-.*/
+      #          - stable-website
 
         # Note: comment-out this job in ENT
       - build-darwin-binaries:
