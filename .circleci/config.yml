@@ -291,7 +291,7 @@ jobs:
         default: ""
       executor:
         type: string
-        default: "go-arm64-image"
+        default: "ubuntu-2004:202101-01"
       goarch:
         type: string
         default: "arm64"
