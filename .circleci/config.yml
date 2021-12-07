@@ -378,12 +378,11 @@ jobs:
       - store_artifacts:
           path: /tmp/test-reports
   lint-go:
-    executor: go
+    executor: go-arm64-image
     steps:
       - checkout
       - run: apt-get update; apt-get install -y shellcheck sudo unzip
       - install-buf
-      - install-circleci-local-cli
       - run: make deps lint-deps
       - run: make check
       - run: make checkscripts
