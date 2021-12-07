@@ -614,10 +614,20 @@ workflows:
                 - /^e2e-.*/
                 - stable-website
 
-      - test-machine:
-          name: "test-client"
-          test_packages: "./client/..."
+      #- test-machine:
+      #    name: "test-client"
+      #    test_packages: "./client/..."
           # test branches are the branches that can impact unit tests
+      #    filters: &backend_test_branches_filter
+      #      branches:
+      #        ignore:
+      #          - /^.-ui\b.*/
+      #          - /^docs-.*/
+      #          - /^e2e-.*/
+      #          - stable-website
+      - test-machine:
+          name: "test-nomad"
+          test_packages: "./nomad/..."
           filters: &backend_test_branches_filter
             branches:
               ignore:
@@ -625,10 +635,6 @@ workflows:
                 - /^docs-.*/
                 - /^e2e-.*/
                 - stable-website
-      - test-machine:
-          name: "test-nomad"
-          test_packages: "./nomad/..."
-          filters: *backend_test_branches_filter
       #- test-machine:
           # API Tests run in a VM rather than container due to the FS tests
           # requiring `mount` priviliges.
