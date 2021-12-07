@@ -8,8 +8,8 @@ references:
     ubuntu-1604:201903-01
   go-windows-image: &go_windows_image
     windows-server-2019-vs2019:stable
-  go-arm64-image: &ubuntu-2004:202101-01
-     ubuntu-2004:202101-01
+  go-arm64-image: &go_arm64_image
+    ubuntu-2004:202101-01
 
   # common references
   common_envs: &common_envs
@@ -291,7 +291,7 @@ jobs:
         default: ""
       executor:
         type: string
-        default: "ubuntu-2004:202101-01"
+        default: "go-machine-arm64"
       goarch:
         type: string
         default: "arm64"
@@ -558,15 +558,12 @@ executors:
       GOTESTSUM_VERSION: 0.4.2
       VAULT_VERSION: 1.4.1
       
-  go-arm64:
+  go-machine-arm64:
     working_directory: ~/go/src/github.com/hashicorp/nomad
     machine:
-      image: ubuntu-2004:202101-01
-    resource_class: arm.medium
-    environment:
-      <<: *common_envs
-      GOPATH: /go
-      GOLANG_VERSION: 1.17.3
+      image: *go_arm64_image
+      resource_class: arm.medium
+    environment: *machine_env
 
 workflows:
   build-test:
