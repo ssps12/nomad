@@ -8,6 +8,8 @@ references:
     ubuntu-1604:201903-01
   go-windows-image: &go_windows_image
     windows-server-2019-vs2019:stable
+  go-arm64-image: &ubuntu-2004:202101-01
+     ubuntu-2004:202101-01
 
   # common references
   common_envs: &common_envs
@@ -45,7 +47,7 @@ commands:
               *)       echo "unknown os: ${OSTYPE}"; exit 1 ;;
             esac
 
-            curl -SL --fail -o /tmp/vault.zip https://releases.hashicorp.com/vault/"<< parameters.version >>"/vault_"<< parameters.version >>"_"${os}"_amd64.zip
+            curl -SL --fail -o /tmp/vault.zip https://releases.hashicorp.com/vault/"<< parameters.version >>"/vault_"<< parameters.version >>"_"${os}"_arm64.zip
 
             if [[ "${os}" != "windows" ]]; then
               sudo unzip -d /usr/local/bin /tmp/vault.zip
@@ -64,7 +66,7 @@ commands:
       - run:
           name: Install Consul << parameters.version >>
           command: |
-            curl -SL --fail -o /tmp/consul.zip https://releases.hashicorp.com/consul/<< parameters.version >>/consul_<< parameters.version >>_linux_amd64.zip
+            curl -SL --fail -o /tmp/consul.zip https://releases.hashicorp.com/consul/<< parameters.version >>/consul_<< parameters.version >>_linux_arm64.zip
             sudo unzip -d /usr/local/bin /tmp/consul.zip
             rm -rf /tmp/consul*
   install-golang:
@@ -91,7 +93,7 @@ commands:
             then
               sudo rm -rf << parameters.target_directory >>/go
               sudo mkdir -p << parameters.target_directory >>
-              curl -SL --fail -o /tmp/golang.tar.gz https://dl.google.com/go/go${GOLANG_VERSION}.${os}-amd64.tar.gz
+              curl -SL --fail -o /tmp/golang.tar.gz https://dl.google.com/go/go${GOLANG_VERSION}.${os}-arm64.tar.gz
               sudo tar -C << parameters.target_directory >> -xzf /tmp/golang.tar.gz
               rm -rf /tmp/golang.tar.gz
             else
@@ -102,38 +104,38 @@ commands:
               rm -rf /tmp/go.zip
             fi
 
-  install-circleci-local-cli:
-    parameters:
-      version:
-        type: string
-        default: 0.1.5879
+  #install-circleci-local-cli:
+  #  parameters:
+   #   version:
+   #     type: string
+   #     default: 0.1.5879
 
-      sha256:
-        type: string
-        default: f178ea62c781aec06267017404f87983c87f171fd0e66ef3737916246ae66dd6
-    steps:
-      - run:
-          name: Install CircleCI CLI << parameters.version >>
-          command: |
-            CCI_VERSION="<< parameters.version >>"
-            CCI_SHA256="<< parameters.sha256 >>"
+    #  sha256:
+    #    type: string
+    #    default: f178ea62c781aec06267017404f87983c87f171fd0e66ef3737916246ae66dd6
+    #steps:
+    #  - run:
+    #      name: Install CircleCI CLI << parameters.version >>
+    #      command: |
+    #        CCI_VERSION="<< parameters.version >>"
+    #        CCI_SHA256="<< parameters.sha256 >>"
 
-            URL="https://github.com/CircleCI-Public/circleci-cli/releases/download/v${CCI_VERSION}/circleci-cli_${CCI_VERSION}_linux_amd64.tar.gz"
+     #       URL="https://github.com/CircleCI-Public/circleci-cli/releases/download/v${CCI_VERSION}/circleci-cli_${CCI_VERSION}_linux_amd64.tar.gz"
 
-            mkdir -p /tmp/circleci-cli/
-            curl --fail --show-error --location \
-              -o /tmp/circleci-cli/cli.tar.gz "${URL}"
+      #      mkdir -p /tmp/circleci-cli/
+      #      curl --fail --show-error --location \
+      #        -o /tmp/circleci-cli/cli.tar.gz "${URL}"
 
-            echo "$CCI_SHA256 /tmp/circleci-cli/cli.tar.gz" | sha256sum -c
+      #      echo "$CCI_SHA256 /tmp/circleci-cli/cli.tar.gz" | sha256sum -c
 
-            tar -xz --strip-components=1 \
-              -C /tmp/circleci-cli \
-              -f /tmp/circleci-cli/cli.tar.gz \
-              "circleci-cli_${CCI_VERSION}_linux_amd64/circleci"
+      #      tar -xz --strip-components=1 \
+      #        -C /tmp/circleci-cli \
+      #        -f /tmp/circleci-cli/cli.tar.gz \
+      #        "circleci-cli_${CCI_VERSION}_linux_amd64/circleci"
 
-            sudo cp /tmp/circleci-cli/circleci /usr/bin/circleci-local-cli
+      #      sudo cp /tmp/circleci-cli/circleci /usr/bin/circleci-local-cli
 
-            circleci-local-cli version
+      #      circleci-local-cli version
   run-tests:
     steps:
       - run:
@@ -556,6 +558,16 @@ executors:
       GOLANG_VERSION: 1.17.3
       GOTESTSUM_VERSION: 0.4.2
       VAULT_VERSION: 1.4.1
+      
+  go-arm64:
+    working_directory: ~/go/src/github.com/hashicorp/nomad
+    machine:
+      image: ubuntu-2004:202101-01
+    resource_class: arm.medium
+    environment:
+      <<: *common_envs
+      GOPATH: /home/circleci/go
+      GOLANG_VERSION: 1.17.3
 
 workflows:
   build-test:
