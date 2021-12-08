@@ -327,7 +327,7 @@ jobs:
       - store_artifacts:
           path: /tmp/test-reports
   test-e2e:
-    executor: go
+    executor: go-machine-arm64
     steps:
       - checkout
       - run: apt-get update; apt-get install -y sudo unzip
@@ -348,6 +348,7 @@ jobs:
             sudo -H -u circleci git config --global url."ssh://git@github.com".insteadOf "https://github.com"
 
       - run: sudo -E -H -u circleci PATH=${PATH} make deps
+      - run: sudo uname -m
       - run: sudo -E -H -u circleci PATH=${PATH} make integration-test
       - run: sudo -E -H -u circleci PATH=${PATH} make e2e-test
   test-container:
@@ -591,8 +592,13 @@ workflows:
       #- build-darwin-binaries:
       #    filters: *backend_check_branches_filter
 
-      #- test-e2e:
-      #    filters: *backend_check_branches_filter
+      - test-e2e:
+          filters: &backend_check_branches_filter
+            branches:
+              ignore:
+                - /^.-ui\b.*/
+                - /^docs-.*/
+                - stable-website
 
       - test-ui:
           filters:
