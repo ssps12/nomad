@@ -330,7 +330,7 @@ jobs:
     executor: go-machine-arm64
     steps:
       - checkout
-      - run: sudo apt-get update; apt-get install -y sudo unzip
+      - run: sudo apt-get update; sudo apt-get install -y unzip
       # e2e tests require privileged mount/umount permissions when running as root
       # TODO: switch to using machine executor and run as root to test e2e path
       - run:
